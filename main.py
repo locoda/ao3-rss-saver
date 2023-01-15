@@ -1,26 +1,15 @@
 import os
+import sys
+import tomli
 import feedparser
 import requests
 from datetime import datetime
 
 FOLDER = "exports"
 FORMATS = ["html", "epub"]
-FEEDS = [
-  'https://archiveofourown.org/tags/16861914/feed.atom', # Generations from Exile Tribe (Band)
-  'https://archiveofourown.org/tags/19984521/feed.atom', # The Rampage from Exile Tribe (Band)
-  'https://archiveofourown.org/tags/40234885/feed.atom', # Fantastics from Exile Tribe (Band)
-  'https://archiveofourown.org/tags/17343258/feed.atom', # EXILE (Japan Band)
-  'https://archiveofourown.org/tags/12153406/feed.atom', # J Soul Brothers (Band)
-  'https://archiveofourown.org/tags/65865229/feed.atom', # Sexy Zone (Band)
-  'https://archiveofourown.org/tags/5650746/feed.atom', # SixTONES (Band)
-  'https://archiveofourown.org/tags/65865400/feed.atom', # Hey! Say! JUMP (Band)
-  'https://archiveofourown.org/tags/21592518/feed.atom', # HiGH&LOW: the Story of S.W.O.R.D. (TV)
-  'https://archiveofourown.org/tags/21592494/feed.atom', # HiGH&LOW (Movies)
-  'https://archiveofourown.org/tags/72641245/feed.atom', # Sato Taiki/Yamamoto Sekai
-]
 
 def saveFiles(export_dir, id, title, author):
-    print(f"savign work {id}, {title} by {author}")
+    sys.stdout.write(f"saving work {id}, {title} by {author}\r\n")
     for format in FORMATS:
         os.makedirs(os.path.join(export_dir, format), exist_ok = True)
         download_url = f"https://archiveofourown.org/downloads/{id}/{id}.{format}" 
@@ -30,11 +19,10 @@ def saveFiles(export_dir, id, title, author):
             f.write(r.content)
 
 def parse(feed):
-    print(f"parsing feed {feed}")
-    d = feedparser.parse(feed)
-    # Grab title from feed and make folder
-    source = d['feed']['title']
-    export_dir = os.path.join(FOLDER, source)
+    sys.stdout.write(f"parsing feed {feed['name']}: {feed['url']}\r\n")
+    d = feedparser.parse(feed['url'])
+    # Grab feed name and make folder
+    export_dir = os.path.join(FOLDER, feed['name'])
     os.makedirs(export_dir, exist_ok = True)
     # Grab last update time from feed
     updated = datetime.fromisoformat(d['feed']['updated'][:-1])
@@ -54,10 +42,13 @@ def parse(feed):
             author = entry.author
             saveFiles(export_dir, id, title, author)
     # Save feed snapshot
-    r = requests.get(feed)  
+    r = requests.get(feed['url'])  
     with open(os.path.join(export_dir, 'snapshot.atom'), 'wb') as f:
         f.write(r.content)
 
 if __name__ == "__main__":
-    for feed in FEEDS:
+    with open("config.toml", "rb") as f:
+        config = tomli.load(f)
+    
+    for feed in config['feeds']:
         parse(feed)
