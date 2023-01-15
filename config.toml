@@ -42,6 +42,6 @@ url = 'https://archiveofourown.org/tags/21592494/feed.atom'
 name = 'Sato Taiki:Yamamoto Sekai'
 url = 'https://archiveofourown.org/tags/72641245/feed.atom'
 
-[[feeds]]
-name = 'Chinese Comedian RPF'
-url = 'https://archiveofourown.org/tags/15453690/feed.atom'
+# [[feeds]]
+# name = 'Chinese Comedian RPF'
+# url = 'https://archiveofourown.org/tags/15453690/feed.atom'
