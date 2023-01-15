@@ -14,9 +14,11 @@ FEEDS = [
   'https://archiveofourown.org/tags/65865229/feed.atom', # Sexy Zone (Band)
   'https://archiveofourown.org/tags/5650746/feed.atom', # SixTONES (Band)
   'https://archiveofourown.org/tags/65865400/feed.atom', # Hey! Say! JUMP (Band)
+  'https://archiveofourown.org/tags/21592518/feed.atom', # HiGH&LOW: the Story of S.W.O.R.D. (TV)
 ]
 
 def saveFiles(export_dir, id, title, author):
+    print(f"savign work {id}, {title} by {author}")
     for format in FORMATS:
         os.makedirs(os.path.join(export_dir, format), exist_ok = True)
         download_url = f"https://archiveofourown.org/downloads/{id}/{id}.{format}" 
@@ -26,6 +28,7 @@ def saveFiles(export_dir, id, title, author):
             f.write(r.content)
 
 def parse(feed):
+    print(f"parsing feed {feed}")
     d = feedparser.parse(feed)
     # Grab title from feed and make folder
     source = d['feed']['title']
