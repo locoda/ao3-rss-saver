@@ -1,9 +1,9 @@
 # ao3-rss-saver
-[![AO3 RSS Downloader](https://github.com/locoda/ao3-rss-saver/actions/workflows/action.yaml/badge.svg)](https://github.com/locoda/ao3-rss-saver/actions/workflows/action.yaml)
+[![AO3 RSS Downloader](https://github.com/locoda/ao3-rss-saver/actions/workflows/action.yaml/badge.svg)](https://github.com/locoda/ao3-rss-saver/actions/workflows/action.yaml) 
+
+[![Preview](https://img.shields.io/badge/Preview-%20%20-brightgreen)](https://ao3-rss-saver.pages.dev/)
 
 由于有一些太太从AO3删文跑路所以尝试从RSS抓取所有我关心的tag的文章……
-
-[预览已保存文件](https://ao3-rss-saver.pages.dev/)
 
 ---
 
