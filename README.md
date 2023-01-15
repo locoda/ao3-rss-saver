@@ -3,6 +3,8 @@
 
 由于有一些太太从AO3删文跑路所以尝试从RSS抓取所有我关心的tag的文章……
 
+[Hosted Files](https://ao3-rss-saver.pages.dev/)
+
 ### 一些杂记：
 
 AO3 RSS 定义在 config.toml内
