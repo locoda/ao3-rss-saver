@@ -15,6 +15,8 @@ FEEDS = [
   'https://archiveofourown.org/tags/5650746/feed.atom', # SixTONES (Band)
   'https://archiveofourown.org/tags/65865400/feed.atom', # Hey! Say! JUMP (Band)
   'https://archiveofourown.org/tags/21592518/feed.atom', # HiGH&LOW: the Story of S.W.O.R.D. (TV)
+  'https://archiveofourown.org/tags/21592494/feed.atom', # HiGH&LOW (Movies)
+  'https://archiveofourown.org/tags/72641245/feed.atom', # Sato Taiki/Yamamoto Sekai
 ]
 
 def saveFiles(export_dir, id, title, author):
