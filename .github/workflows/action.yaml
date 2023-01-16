@@ -25,6 +25,10 @@ jobs:
         run: python main.py
         shell: bash
       
+      - name: Re-date files
+        run: bash date.sh
+        shell: bash
+      
       - name: Generate indexes
         run: wget -qO-  https://gist.githubusercontent.com/glowinthedark/625eb4caeca12c5aa52778a3b4b0adb4/raw/generate_directory_index_caddystyle.py | python3 - exports -r
         shell: bash
