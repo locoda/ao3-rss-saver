@@ -326,9 +326,6 @@ def process_dir(top_dir, opts):
                              <th></th>
                              <th>Name</th>
                              <th>Size</th>
-                             <th class="hideable">
-                                 Modified
-                             </th>
                              <th class="hideable"></th>
                          </tr>
                          </thead>
@@ -344,7 +341,8 @@ def process_dir(top_dir, opts):
                  """)
 
     # sort dirs first
-    sorted_entries = sorted(path_top_dir.glob(glob_patt), key=lambda p: (p.is_file(), p.name))
+    filtered = [x for x in path_top_dir.glob(glob_patt) if x.name != 'snapshot.atom']
+    sorted_entries = sorted(filtered, key=lambda p: (p.is_file(), p.name), reverse=True)
 
     entry: Path
     for entry in sorted_entries:
@@ -369,18 +367,11 @@ def process_dir(top_dir, opts):
 
         size_bytes = -1  # is a folder
         size_pretty = '&mdash;'
-        last_modified = '-'
-        last_modified_human_readable = '-'
-        last_modified_iso = ''
+
         try:
             if entry.is_file():
                 size_bytes = entry.stat().st_size
                 size_pretty = pretty_size(size_bytes)
-
-            if entry.is_dir() or entry.is_file():
-                last_modified = datetime.datetime.fromtimestamp(entry.stat().st_mtime).replace(microsecond=0)
-                last_modified_iso = last_modified.isoformat()
-                last_modified_human_readable = last_modified.strftime("%c")
 
         except Exception as e:
             print('ERROR accessing file name:', e, entry)
