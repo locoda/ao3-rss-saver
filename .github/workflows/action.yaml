@@ -26,7 +26,7 @@ jobs:
         shell: bash
       
       - name: Generate indexes
-        run: python3 generate_directory_index_caddystyle.py exports -r
+        run: python3 generate_indexes.py 
         shell: bash
       
       - uses: EndBug/add-and-commit@v9 
