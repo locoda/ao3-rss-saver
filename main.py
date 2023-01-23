@@ -1,9 +1,9 @@
 import os
 import sys
 import tomli
-import feedparser
+from bs4 import BeautifulSoup
 import requests
-from datetime import datetime
+import json
 
 FOLDER = "exports"
 FORMAT = "html"
@@ -18,31 +18,35 @@ def saveFiles(export_dir, id, title, author):
 
 def parse(feed):
     sys.stdout.write(f"parsing feed {feed['name']}: {feed['url']}\r\n")
-    d = feedparser.parse(feed['url'])
+    
     # Grab feed name and make folder
     export_dir = os.path.join(FOLDER, feed['name'])
     os.makedirs(export_dir, exist_ok = True)
-    # Grab last update time from feed
-    updated = datetime.fromisoformat(d['feed']['updated'][:-1])
-    last_updated = datetime.min
-    snapshot_path = os.path.join(export_dir, 'snapshot.atom')
-    if (os.path.exists(snapshot_path)):
-        snapshot = feedparser.parse(snapshot_path)
-        last_updated = datetime.fromisoformat(snapshot['feed']['updated'][:-1])
-        if (updated <= last_updated):
-            # No new item is found
-            return
-    # Save New Items
-    for entry in d.entries:
-        if (datetime.fromisoformat(entry.updated[:-1]) > last_updated):
-            id = entry.id.split('Work/')[1]
-            title = entry.title
-            author = entry.author
+
+    # Grab last metadata if exist
+    if os.path.exists(os.path.join(export_dir, 'meta.json')):
+        with open(os.path.join(export_dir, 'meta.json'), "r") as f:
+            old_metadata = json.load(f)
+    else:
+        old_metadata = {}
+
+    # Grab current webpage
+    soup = BeautifulSoup(requests.get(feed['url']).content, "html.parser")
+    entries = soup.select("ol.work.index.group > li")
+    metadata = {}
+    for entry in entries:
+        title = entry.select('h4 > a')[0].get_text()
+        author = entry.select('h4 > a')[1].get_text()
+        id = entry.attrs['id'].lstrip('work_')
+        words = int(entry.select_one('dd.words').text.replace(',', ''))
+        metadata[id] = words
+        if old_metadata.get(id) != words: 
+            # Download if old metadata doesn't match current word
             saveFiles(export_dir, id, title, author)
-    # Save feed snapshot
-    r = requests.get(feed['url'])  
-    with open(os.path.join(export_dir, 'snapshot.atom'), 'wb') as f:
-        f.write(r.content)
+        
+    # Save Metadata for next crawl
+    with open(os.path.join(export_dir, 'meta.json'), "w") as f:
+        json.dump(metadata, f)
 
 if __name__ == "__main__":
     with open("config.toml", "rb") as f:
