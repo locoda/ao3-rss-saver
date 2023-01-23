@@ -28,6 +28,8 @@ def generate_index(dir):
                         continue
                     if (item == 'snapshot.atom'): 
                         continue
+                    if (item == 'meta.json'): 
+                        continue
                     if (item.startswith('.')):
                         continue
                     with tag('p'):
