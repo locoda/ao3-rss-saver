@@ -21,7 +21,7 @@ def generate_index(dir):
                 with tag('p'):
                     with tag('a', href='..'):
                         text('..')
-                directories = [d for d in os.listdir(dir) if os.path.isdir(os.path.join(dir, d))]
+                directories = sorted([d for d in os.listdir(dir) if os.path.isdir(os.path.join(dir, d))])
                 files = sorted([d for d in os.listdir(dir) if os.path.isfile(os.path.join(dir, d))], reverse=True)
                 for item in directories + files:
                     if (item == 'index.html'): 
