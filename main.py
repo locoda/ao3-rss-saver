@@ -44,7 +44,10 @@ def parse(feed):
         except IndexError:
             author = "Anonymous"  # No link on author
         id = entry.attrs['id'].lstrip('work_')
-        words = int(entry.select_one('dd.words').text.replace(',', ''))
+        try:
+            words = int(entry.select_one('dd.words').text.replace(',', ''))
+        except ValueError:
+            words = 0 # No words - Seems like AO3 Bug 
         metadata[id] = words
         if old_metadata.get(id) != words:
             # Download if old metadata doesn't match current word
