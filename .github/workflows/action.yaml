@@ -2,8 +2,8 @@
 name: 'AO3 RSS Downloader'
 
 on:
-  schedule:
-    - cron: '0 */2 * * *'
+#  schedule:
+#    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 jobs:
