@@ -4,6 +4,7 @@ import tomli
 from bs4 import BeautifulSoup
 import requests
 import json
+import random
 import time
 
 FOLDER = "exports"
@@ -12,6 +13,7 @@ FORMAT = "html"
 
 def saveFiles(export_dir, id, title, author):
     sys.stdout.write(f"saving work {id}, {title} by {author}\r\n")
+    time.sleep(random.randint(1, 5))
     download_url = f"https://archiveofourown.org/downloads/{id}/{id}.{FORMAT}?updated_at={int(time.time())}"
     downlad_filename = f"{id}_{title}_{author}.{FORMAT}".replace('/', '_')
     r = requests.get(download_url)
